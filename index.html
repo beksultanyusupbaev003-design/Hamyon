@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#08090c">
+<title>Hamyon</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#08090c;color:#f7f7f8;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif}
+body{overflow-x:hidden}
+button,input{font:inherit}button{border:0}
+:root{--bg:#08090c;--panel:#13151a;--panel2:#191b21;--text:#f7f7f8;--muted:#858992;--line:rgba(255,255,255,.08);--green:#55e69b;--red:#ff687c;--blue:#8095ff}
+
+
+.hidden{display:none!important}
+.app{width:100%;max-width:520px;min-height:100vh;margin:auto;padding:18px 16px 115px;position:relative;z-index:2}
+.bg{position:fixed;border-radius:50%;pointer-events:none;filter:blur(100px);opacity:.45;z-index:0}.bg.a{width:360px;height:360px;top:-180px;right:-160px;background:rgba(90,110,255,.12)}.bg.b{width:300px;height:300px;bottom:-180px;left:-170px;background:rgba(140,80,255,.07)}
+.page{display:none;animation:pageIn .4s cubic-bezier(.2,.8,.2,1)}.page.active{display:block}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.brand{display:flex;align-items:center;gap:11px}.logo{width:43px;height:43px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#242832,#111318);border:1px solid var(--line);font-size:20px;font-weight:800;box-shadow:inset 0 1px rgba(255,255,255,.08)}.brand-name{font-size:20px;font-weight:800;letter-spacing:-.6px}.brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.icon-btn{width:43px;height:43px;border-radius:15px;background:rgba(255,255,255,.055);color:#aaa;border:1px solid var(--line);cursor:pointer}.icon-btn:active{transform:scale(.9)}
+.balance-card{position:relative;overflow:hidden;padding:25px;border-radius:29px;background:radial-gradient(circle at 90% 0,rgba(115,140,255,.21),transparent 38%),linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.1);box-shadow:0 25px 70px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.07);animation:cardIn .65s cubic-bezier(.2,.8,.2,1)}
+.balance-label{font-size:13px;color:#a3a6ae}.balance{margin-top:7px;font-size:clamp(34px,9vw,47px);line-height:1.1;font-weight:850;letter-spacing:-2.2px;word-break:break-word}.currency{font-size:14px;color:#999ca5;letter-spacing:0;font-weight:600}.balance.negative{color:var(--red)}
+.balance-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}.money-box{padding:13px;border-radius:17px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.055)}.money-title{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px}.dot{width:7px;height:7px;border-radius:50%}.dot.green{background:var(--green);box-shadow:0 0 12px rgba(85,230,155,.5)}.dot.red{background:var(--red);box-shadow:0 0 12px rgba(255,104,124,.45)}.money-value{margin-top:6px;font-size:15px;font-weight:750}
+.section{margin-top:27px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.section-title{font-size:17px;font-weight:750}.section-action{color:#91a5ff;font-size:12px;cursor:pointer}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:11px}.quick-btn{height:61px;border-radius:19px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 17px;color:#fff;cursor:pointer;transition:.18s}.quick-btn:active{transform:scale(.95)}.quick-icon{width:35px;height:35px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:19px}.income-icon{color:var(--green);background:rgba(85,230,155,.11)}.expense-icon{color:var(--red);background:rgba(255,104,124,.11)}.quick-text{font-size:14px;font-weight:650}
+.today{padding:17px;border-radius:21px;background:rgba(255,255,255,.045);border:1px solid var(--line)}.today-top{display:flex;justify-content:space-between;align-items:center}.today-title{font-size:13px;font-weight:700}.today-date{font-size:10px;color:var(--muted)}.today-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.today-item{padding:11px;border-radius:14px;background:rgba(0,0,0,.14)}.today-label{font-size:10px;color:var(--muted)}.today-value{font-size:14px;font-weight:750;margin-top:4px}
+.transactions{display:flex;flex-direction:column;gap:9px}.transaction{position:relative;display:flex;align-items:center;min-height:84px;padding:13px;border-radius:19px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);}.transaction.new{animation:itemIn .45s cubic-bezier(.2,.8,.2,1)}.transaction-icon{width:43px;height:43px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-right:12px;font-size:18px;flex:none}.transaction-info{min-width:0;flex:1;padding-right:8px}.transaction-name{font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.transaction-date{margin-top:4px;color:var(--muted);font-size:11px}.transaction-amount{flex:0 0 auto;min-width:105px;text-align:right;font-size:14px;font-weight:750;white-space:nowrap;letter-spacing:-.2px}.transaction-amount.income{color:var(--green)}.transaction-amount.expense{color:var(--red)}
+.empty{padding:34px 15px;text-align:center;color:var(--muted);background:rgba(255,255,255,.025);border:1px dashed rgba(255,255,255,.08);border-radius:20px}.empty-icon{font-size:28px;margin-bottom:8px}.empty-title{color:#ddd;font-size:14px;font-weight:650}.empty-text{font-size:12px;margin-top:5px}
+.stat-card{padding:19px;border-radius:23px;background:rgba(255,255,255,.05);border:1px solid var(--line)}.chart{height:150px;display:flex;align-items:flex-end;gap:7px;margin-top:17px}.bar-wrap{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center}.bar{width:100%;max-width:26px;min-height:3px;border-radius:8px 8px 4px 4px;background:linear-gradient(to top,#596fd5,#8298ff);box-shadow:0 5px 20px rgba(108,140,255,.18);transform-origin:bottom;animation:barIn .7s cubic-bezier(.2,.8,.2,1) both}.chart-labels{display:flex;gap:7px;margin-top:8px}.chart-label{flex:1;text-align:center;font-size:9px;color:var(--muted)}
+.setting{display:flex;justify-content:space-between;align-items:center;padding:16px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid var(--line);margin-bottom:9px}.setting-left{display:flex;align-items:center;gap:12px}.setting-icon{width:39px;height:39px;border-radius:12px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center}.setting-title{font-size:13px;font-weight:650}.setting-sub{color:var(--muted);font-size:10px;margin-top:3px}.setting-arrow{color:#666;font-size:18px}.danger{color:var(--red);font-size:12px;font-weight:650}
+.bottom-nav{position:fixed;left:50%;bottom:13px;transform:translateX(-50%);width:calc(100% - 28px);max-width:490px;height:68px;border-radius:24px;background:rgba(20,21,25,.88);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid rgba(255,255,255,.09);box-shadow:0 15px 50px rgba(0,0,0,.5);display:grid;grid-template-columns:repeat(4,1fr);z-index:20}.nav-btn{background:transparent;color:#73757d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative}.nav-btn.active{color:#fff}.nav-btn.active:before{content:"";position:absolute;top:7px;width:32px;height:3px;border-radius:5px;background:#fff}.nav-icon{font-size:19px}.nav-label{font-size:9px;font-weight:600}
+.fab{position:fixed;right:max(24px,calc(50% - 230px));bottom:95px;width:58px;height:58px;border-radius:19px;background:#f5f5f5;color:#09090b;font-size:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 35px rgba(0,0,0,.4);cursor:pointer;z-index:15;transition:.2s}.fab:active{transform:scale(.88) rotate(10deg)}
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}.overlay.show{opacity:1;pointer-events:auto}.sheet{width:100%;max-width:520px;background:#15161a;border:1px solid rgba(255,255,255,.08);border-radius:30px 30px 0 0;padding:13px 17px 29px;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}.overlay.show .sheet{transform:translateY(0)}.handle{width:38px;height:4px;border-radius:10px;background:#41434a;margin:0 auto 22px}.sheet-title{font-size:21px;font-weight:780;margin-bottom:18px}.type-switch{display:grid;grid-template-columns:1fr 1fr;padding:4px;background:#0c0d10;border-radius:15px;margin-bottom:17px}.type-btn{padding:11px;border-radius:11px;background:transparent;color:var(--muted);cursor:pointer;font-size:13px;font-weight:650}.selected-income{background:rgba(85,230,155,.13);color:var(--green)}.selected-expense{background:rgba(255,104,124,.13);color:var(--red)}.input-group{margin-bottom:13px}.input-label{display:block;font-size:11px;color:var(--muted);margin:0 0 7px 3px}.input{width:100%;height:52px;padding:0 15px;outline:none;border-radius:15px;border:1px solid rgba(255,255,255,.08);background:#0e0f12;color:#fff;font-size:15px}.input:focus{border-color:rgba(130,150,255,.5)}.amount-input{font-size:23px;font-weight:700}.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.category{height:57px;border-radius:14px;background:#0e0f12;border:1px solid rgba(255,255,255,.06);color:#aaa;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-size:10px}.category span{font-size:18px}.category.selected{color:#fff;border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.09)}.save-btn{width:100%;height:55px;border-radius:17px;margin-top:18px;background:#f3f3f3;color:#09090b;font-weight:800;cursor:pointer}.new-pin{text-align:center;letter-spacing:14px;font-size:27px;font-weight:700}
+#lockScreen{position:fixed;inset:0;z-index:999;background:radial-gradient(circle at 50% 18%,rgba(120,146,255,.12),transparent 33%),#08090c;display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .5s ease,transform .55s cubic-bezier(.2,.8,.2,1)}#lockScreen.unlocking{opacity:0;transform:scale(1.045);pointer-events:none}.lock{width:100%;max-width:360px;text-align:center;animation:lockIn .7s ease}.lock-logo{width:68px;height:68px;margin:0 auto 22px;border-radius:23px;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;background:linear-gradient(145deg,#22252d,#111318);border:1px solid rgba(255,255,255,.11);box-shadow:inset 0 1px rgba(255,255,255,.08),0 22px 60px rgba(0,0,0,.4)}.lock-title{font-size:28px;font-weight:800;letter-spacing:-1px}.lock-subtitle{color:var(--muted);font-size:13px;margin-top:7px}.pin-dots{display:flex;justify-content:center;gap:15px;margin:30px 0 28px}.pin-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:transparent;transition:.2s}.pin-dot.active{background:#fff;border-color:#fff;transform:scale(1.12);box-shadow:0 0 15px rgba(255,255,255,.25)}.pin-error{height:18px;color:var(--red);font-size:12px;margin-bottom:9px;opacity:0}.pin-error.show{opacity:1}.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:300px;margin:auto}.pin-key{height:65px;border-radius:22px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.065);color:#fff;font-size:23px;font-weight:600;cursor:pointer;transition:transform .12s,background .15s}.pin-key:active{transform:scale(.91);background:rgba(255,255,255,.13)}.pin-key.zero{grid-column:2}.pin-delete{grid-column:3;grid-row:4;font-size:18px;color:#aaa}.lock.shake{animation:shake .36s ease}
+.success-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.58);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.25s}.success-overlay.show{opacity:1;pointer-events:auto}.success-card{width:175px;height:175px;border-radius:39px;background:linear-gradient(145deg,rgba(35,40,45,.98),rgba(18,20,23,.98));border:1px solid rgba(255,255,255,.1);box-shadow:0 25px 80px rgba(0,0,0,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:scale(.65);opacity:0}.success-overlay.show .success-card{animation:successCard .55s cubic-bezier(.2,1.4,.3,1) forwards}.check-circle{width:66px;height:66px;border-radius:50%;background:rgba(85,230,155,.12);border:1px solid rgba(85,230,155,.25);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:35px;box-shadow:0 0 35px rgba(85,230,155,.14)}.success-title{margin-top:14px;font-size:15px;font-weight:750}.success-sub{color:#777b83;font-size:10px;margin-top:3px}.toast{position:fixed;left:50%;top:22px;transform:translate(-50%,-25px);background:rgba(35,36,41,.97);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 17px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;z-index:300;transition:.3s;white-space:nowrap;box-shadow:0 12px 35px rgba(0,0,0,.35)}.toast.show{opacity:1;transform:translate(-50%,0)}.undo{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:#24262c;color:#fff;border:1px solid rgba(255,255,255,.1);padding:11px 16px;border-radius:14px;z-index:301;opacity:0;pointer-events:none;transition:.3s;font-size:12px;font-weight:700}.undo.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}.backup-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.small-btn{height:48px;border-radius:15px;background:rgba(255,255,255,.06);color:#eee;border:1px solid var(--line);font-size:12px;font-weight:650;cursor:pointer}
+@keyframes lockIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}50%{transform:translateX(10px)}75%{transform:translateX(-6px)}}@keyframes cardIn{from{opacity:0;transform:translateY(15px) scale(.98)}to{opacity:1;transform:none}}@keyframes itemIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}@keyframes pageIn{from{opacity:0;transform:translateY(9px) scale(.995)}to{opacity:1;transform:none}}@keyframes successCard{0%{opacity:0;transform:scale(.65)}65%{opacity:1;transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}@keyframes barIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(max-width:370px){.pin-key{height:59px}.category{font-size:9px}.balance{font-size:31px}.transaction-amount{min-width:92px;font-size:13px}}
+
+.intro-screen{position:fixed;inset:0;z-index:1200;background:#07080b;display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:none}
+.intro-glow{position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(125,145,255,.25),rgba(125,145,255,0) 68%);filter:blur(8px);animation:introGlow 2.2s ease-out forwards}
+.intro-ring{position:absolute;width:112px;height:112px;border-radius:34px;border:1px solid rgba(255,255,255,.12);box-shadow:0 0 70px rgba(125,145,255,.18),inset 0 1px rgba(255,255,255,.1);transform:scale(.5) rotate(-18deg);opacity:0;animation:introRing 1s cubic-bezier(.2,1.3,.3,1) .15s forwards}
+.intro-logo{position:relative;width:78px;height:78px;border-radius:26px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#282c36,#101216);border:1px solid rgba(255,255,255,.14);font-size:34px;font-weight:850;box-shadow:0 25px 80px rgba(0,0,0,.6),inset 0 1px rgba(255,255,255,.13);opacity:0;transform:scale(.55);animation:introLogo 1s cubic-bezier(.16,1.4,.3,1) .28s forwards}
+.intro-name{position:absolute;margin-top:184px;font-size:24px;font-weight:800;letter-spacing:-1px;opacity:0;transform:translateY(12px);animation:introName .7s ease .72s forwards}
+.intro-line{position:absolute;margin-top:246px;width:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);animation:introLine 1s ease .82s forwards}
+.intro-screen.hide{animation:introOut .7s cubic-bezier(.2,.8,.2,1) forwards}
+.credit{position:fixed;left:0;right:0;bottom:83px;text-align:center;font-size:7px;letter-spacing:1.8px;color:rgba(255,255,255,.22);z-index:4;pointer-events:none}
+@keyframes introGlow{0%{transform:scale(.25);opacity:0}35%{opacity:1}100%{transform:scale(1.7);opacity:.15}}
+@keyframes introRing{0%{opacity:0;transform:scale(.5) rotate(-18deg)}65%{opacity:1;transform:scale(1.08) rotate(2deg)}100%{opacity:.7;transform:scale(1) rotate(0)}}
+@keyframes introLogo{0%{opacity:0;transform:scale(.55) rotate(-10deg)}55%{opacity:1;transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes introName{to{opacity:1;transform:none}}
+@keyframes introLine{to{width:150px}}
+@keyframes introOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.04)}}
+
+.balance{position:relative;display:inline-block;background:linear-gradient(105deg,#fff 0%,#fff 28%,rgba(255,255,255,.48) 40%,#fff 50%,#dfe5ff 70%,#fff 100%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:glassShine 3.6s ease-in-out infinite}
+.balance.negative{color:transparent;background:linear-gradient(105deg,#ff687c 0%,#ff9aa7 42%,#ff687c 58%,#ff687c 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text}
+@keyframes glassShine{0%,45%{background-position:180% 0}70%,100%{background-position:-40% 0}}
+</style>
+</head>
+<body>
+<div class="intro-screen" id="introScreen">
+  <div class="intro-glow"></div>
+  <div class="intro-ring"></div>
+  <div class="intro-logo">₿</div>
+  <div class="intro-name">Hamyon</div>
+  <div class="intro-line"></div>
+</div>
+
+<div class="bg a"></div><div class="bg b"></div>
+
+<div id="lockScreen">
+<div class="lock" id="lockBox">
+<div class="lock-logo">₿</div><div class="lock-title">Hamyon</div>
+<div class="lock-subtitle">Davom etish uchun PIN-kodni kiriting</div>
+<div class="pin-dots"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
+<div class="pin-error" id="pinError">PIN-kod noto‘g‘ri</div>
+<div class="pin-pad">
+<button class="pin-key" onclick="pressPin('1')">1</button><button class="pin-key" onclick="pressPin('2')">2</button><button class="pin-key" onclick="pressPin('3')">3</button>
+<button class="pin-key" onclick="pressPin('4')">4</button><button class="pin-key" onclick="pressPin('5')">5</button><button class="pin-key" onclick="pressPin('6')">6</button>
+<button class="pin-key" onclick="pressPin('7')">7</button><button class="pin-key" onclick="pressPin('8')">8</button><button class="pin-key" onclick="pressPin('9')">9</button>
+<button class="pin-key zero" onclick="pressPin('0')">0</button><button class="pin-key pin-delete" onclick="deletePin()">⌫</button>
+</div></div></div>
+
+<div class="app">
+<main id="homePage" class="page active">
+<header class="header"><div class="brand"><div class="logo">₿</div><div><div class="brand-name">Hamyon</div><div class="brand-sub">Shaxsiy moliyangiz</div></div></div><button class="icon-btn" onclick="showToast('Hamyon V2')">•••</button></header>
+<section class="balance-card"><div class="balance-label">Umumiy balans</div><div class="balance" id="balanceBox"><span id="balance">0</span> <span class="currency">UZS</span></div>
+<div class="balance-footer"><div class="money-box"><div class="money-title"><span class="dot green"></span>Daromad</div><div class="money-value" id="income">0 UZS</div></div><div class="money-box"><div class="money-title"><span class="dot red"></span>Xarajat</div><div class="money-value" id="expense">0 UZS</div></div></div></section>
+<section class="section"><div class="section-head"><div class="section-title">Bugungi holat</div></div><div class="today"><div class="today-top"><div class="today-title">Bugun</div><div class="today-date" id="todayDate"></div></div><div class="today-grid"><div class="today-item"><div class="today-label">Daromad</div><div class="today-value" id="todayIncome">0 UZS</div></div><div class="today-item"><div class="today-label">Xarajat</div><div class="today-value" id="todayExpense">0 UZS</div></div></div></div></section>
+<section class="section"><div class="section-head"><div class="section-title">Tezkor amal</div></div><div class="quick"><button class="quick-btn" onclick="openTransaction('income')"><div class="quick-icon income-icon">＋</div><div class="quick-text">Daromad</div></button><button class="quick-btn" onclick="openTransaction('expense')"><div class="quick-icon expense-icon">−</div><div class="quick-text">Xarajat</div></button></div></section>
+<section class="section"><div class="section-head"><div class="section-title">So‘nggi operatsiyalar</div><div class="section-action" onclick="navigate('transactions')">Barchasi</div></div><div id="homeTransactions" class="transactions"></div></section>
+</main>
+
+<main id="transactionsPage" class="page"><header class="header"><div><div class="brand-name">Tranzaksiyalar</div><div class="brand-sub">Moliyaviy tarixingiz</div></div><button class="icon-btn" onclick="openTransaction('expense')">＋</button></header><div id="allTransactions" class="transactions"></div></main>
+
+<main id="statsPage" class="page"><header class="header"><div><div class="brand-name">Statistika</div><div class="brand-sub">Moliyaviy ko‘rinish</div></div></header><section class="stat-card"><div class="section-title">Oxirgi 7 kun</div><div id="chart" class="chart"></div><div id="chartLabels" class="chart-labels"></div></section><section class="section"><div class="section-head"><div class="section-title">Kategoriyalar</div></div><div id="categoryStats"></div></section></main>
+
+<main id="settingsPage" class="page"><header class="header"><div><div class="brand-name">Sozlamalar</div><div class="brand-sub">Hamyon</div></div></header>
+<div class="setting"><div class="setting-left"><div class="setting-icon">✈️</div><div><div class="setting-title">Telegram backup</div><div class="setting-sub">Har bir operatsiyadan keyin avtomatik backup</div></div></div><div style="font-size:10px;color:#55e69b">AUTO</div></div>
+<div class="setting" onclick="openPinChange()" style="cursor:pointer"><div class="setting-left"><div class="setting-icon">🔐</div><div><div class="setting-title">PIN-kodni o‘zgartirish</div><div class="setting-sub">Kirish parolini yangilash</div></div></div><div class="setting-arrow">›</div></div>
+<div class="section"><div class="setting"><div class="setting-left"><div class="setting-icon">💾</div><div><div class="setting-title">Backup</div><div class="setting-sub">Ma’lumotlaringizni faylga saqlash</div></div></div></div><div class="backup-buttons"><button class="small-btn" onclick="backupData()">↑ Backup</button><button class="small-btn" onclick="document.getElementById('restoreFile').click()">↓ Restore</button></div><input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="restoreData(event)"></div>
+<div class="setting" onclick="clearData()" style="cursor:pointer;margin-top:18px"><div class="setting-left"><div class="setting-icon">🗑️</div><div><div class="setting-title">Ma’lumotlarni tozalash</div><div class="setting-sub">Barcha tranzaksiyalarni o‘chirish</div></div></div><div class="danger">O‘chirish</div></div>
+</main></div>
+
+<button class="fab" onclick="openTransaction('expense')">＋</button>
+<div class="credit">zoloto_n1</div><nav class="bottom-nav"><button class="nav-btn active" data-page="home" onclick="navigate('home')"><div class="nav-icon">⌂</div><div class="nav-label">Bosh sahifa</div></button><button class="nav-btn" data-page="transactions" onclick="navigate('transactions')"><div class="nav-icon">▤</div><div class="nav-label">Tarix</div></button><button class="nav-btn" data-page="stats" onclick="navigate('stats')"><div class="nav-icon">◒</div><div class="nav-label">Statistika</div></button><button class="nav-btn" data-page="settings" onclick="navigate('settings')"><div class="nav-icon">⚙</div><div class="nav-label">Sozlamalar</div></button></nav>
+
+<div class="overlay" id="transactionOverlay" onclick="outsideTransaction(event)"><div class="sheet"><div class="handle"></div><div class="sheet-title">Yangi operatsiya</div><div class="type-switch"><button id="incomeType" class="type-btn" onclick="setType('income')">Daromad</button><button id="expenseType" class="type-btn" onclick="setType('expense')">Xarajat</button></div>
+<div class="input-group"><label class="input-label">Summa</label><input id="amountInput" class="input amount-input" type="text" inputmode="numeric" placeholder="0" oninput="formatAmountInput(this)"></div>
+<div class="input-group"><label class="input-label">Nomi</label><input id="nameInput" class="input" type="text" maxlength="40" placeholder="Masalan: Oylik"></div>
+<div class="input-group"><label class="input-label">Kategoriya</label><div id="categoryGrid" class="category-grid"></div></div>
+<button class="save-btn" onclick="saveTransaction()">Tasdiqlash</button></div></div>
+
+<div class="overlay" id="pinOverlay" onclick="outsidePin(event)"><div class="sheet"><div class="handle"></div><div class="sheet-title">PIN-kodni o‘zgartirish</div><div class="lock-subtitle" style="margin-bottom:18px;text-align:center">Yangi 4 xonali PIN yarating</div><input id="newPinInput" class="input new-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••"><button class="save-btn" onclick="saveNewPin()">Yangi PINni saqlash</button></div></div>
+
+<div class="success-overlay" id="successOverlay"><div class="success-card"><div class="check-circle">✓</div><div class="success-title">Tasdiqlandi</div><div class="success-sub">Muvaffaqiyatli saqlandi</div></div></div>
+<div class="toast" id="toast"></div><button class="undo" id="undoButton" onclick="undoDelete()">Bekor qilish</button>
+
+<script>
+const BOT_TOKEN="8766532573:AAHrJch84PrLXvO0sSDmJVe4_j8wkYv3aA4",CHAT_ID="855204630";
+const TX_KEY="hamyon_v3_transactions",PIN_KEY="hamyon_v3_pin";
+let savedPin=localStorage.getItem(PIN_KEY)||"0511",transactions=JSON.parse(localStorage.getItem(TX_KEY)||"[]"),currentPin="",currentType="income",selectedCategory="other",deletedTransaction=null,undoTimer=null;
+const categories={income:[{id:"salary",icon:"💼",name:"Oylik"},{id:"business",icon:"💰",name:"Biznes"},{id:"gift",icon:"🎁",name:"Sovg‘a"},{id:"other",icon:"＋",name:"Boshqa"}],expense:[{id:"food",icon:"🍔",name:"Ovqat"},{id:"transport",icon:"🚗",name:"Yo‘l"},{id:"shopping",icon:"🛍️",name:"Xarid"},{id:"home",icon:"🏠",name:"Uy"},{id:"phone",icon:"📱",name:"Aloqa"},{id:"entertainment",icon:"🎮",name:"Ko‘ngil"},{id:"health",icon:"💊",name:"Sog‘liq"},{id:"other",icon:"＋",name:"Boshqa"}]};
+const money=n=>new Intl.NumberFormat("uz-UZ",{maximumFractionDigits:0}).format(Math.round(Number(n)||0));
+function haptic(x=12){if(navigator.vibrate)navigator.vibrate(x)}
+function formatAmountInput(i){let r=i.value.replace(/\D/g,"");i.value=r?money(r):""}
+function rawAmount(){return Number(document.getElementById("amountInput").value.replace(/\D/g,""))||0}
+function totals(){let i=0,e=0;transactions.forEach(t=>t.type==="income"?i+=t.amount:e+=t.amount);return{income:i,expense:e,balance:i-e}}
+function animateNumber(el,target){let start=Number(el.dataset.value||0),st=performance.now();el.dataset.value=target;function f(now){let p=Math.min((now-st)/500,1),q=1-Math.pow(1-p,3);el.textContent=money(start+(target-start)*q);if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+function renderBalance(){let t=totals();animateNumber(balance,t.balance);income.textContent=money(t.income)+" UZS";expense.textContent=money(t.expense)+" UZS";balanceBox.classList.toggle("negative",t.balance<0);let s=new Date();s.setHours(0,0,0,0);let e=s.getTime()+86400000,ti=0,te=0;transactions.forEach(x=>{if(x.date>=s.getTime()&&x.date<e)x.type==="income"?ti+=x.amount:te+=x.amount});todayIncome.textContent=money(ti)+" UZS";todayExpense.textContent=money(te)+" UZS";todayDate.textContent=new Date().toLocaleDateString("uz-UZ",{day:"2-digit",month:"long"})}
+function cat(t){return(categories[t.type]||[]).find(c=>c.id===t.category)||{icon:"•",name:"Boshqa"}}
+function dateText(ts){let d=new Date(ts),n=new Date();if(d.toDateString()===n.toDateString())return"Bugun • "+d.toLocaleTimeString("uz-UZ",{hour:"2-digit",minute:"2-digit"});return d.toLocaleDateString("uz-UZ",{day:"2-digit",month:"short"})}
+function esc(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+async function sendToTelegram(tx,allTx){
+ const sign=tx.type==="income"?"+":"−",emoji=tx.type==="income"?"💰":"💸";
+ const date=new Date(tx.date).toLocaleString("uz-UZ",{timeZone:"Asia/Tashkent",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+ const c=cat(tx);
+ const message=`${emoji} HAMYON — YANGI OPERATSIYA
+━━━━━━━━━━━━━━━━━━
+${tx.type==="income"?"📈 Daromad":"📉 Xarajat"}
+💵 ${sign} ${money(tx.amount)} UZS
+📝 ${String(tx.name||"Operatsiya").slice(0,80)}
+🏷 ${c.name}
+🕐 ${date}
+━━━━━━━━━━━━━━━━━━
+💾 To‘liq backup ham yuborildi.`;
+ const r1=await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:CHAT_ID,text:message})});
+ const d1=await r1.json();
+ if(!r1.ok||!d1.ok) throw new Error(d1.description||"Telegram sendMessage error");
+ const backup=JSON.stringify({app:"Hamyon",version:1,exportedAt:new Date().toISOString(),transactions:allTx},null,2);
+ const form=new FormData();
+ form.append("chat_id",String(CHAT_ID));
+ form.append("caption",`💾 Hamyon backup • ${date}`);
+ form.append("document",new Blob([backup],{type:"application/json"}),"hamyon-backup.json");
+ const r2=await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,{method:"POST",body:form});
+ const d2=await r2.json();
+ if(!r2.ok||!d2.ok) throw new Error(d2.description||"Telegram sendDocument error");
+}
+function createTx(t,i){
+let el=document.createElement("div");
+el.className="transaction"+(i===0?" new":"");
+let c=cat(t);
+el.innerHTML=`<div class="transaction-icon" style="background:${t.type==="income"?"rgba(85,230,155,.11)":"rgba(255,104,124,.11)"}">${c.icon}</div><div class="transaction-info"><div class="transaction-name">${esc(t.name)}</div><div class="transaction-date">${c.name} • ${dateText(t.date)}</div></div><div class="transaction-amount ${t.type}">${t.type==="income"?"+":"−"} ${money(t.amount)} UZS</div>`;
+el.addEventListener("contextmenu",e=>{e.preventDefault();if(confirm("Bu tranzaksiyani o‘chirishni xohlaysizmi?"))deleteTx(t.id)});
+let timer;el.addEventListener("touchstart",()=>{timer=setTimeout(()=>{if(confirm("Bu tranzaksiyani o‘chirishni xohlaysizmi?"))deleteTx(t.id)},650)},{passive:true});
+el.addEventListener("touchend",()=>clearTimeout(timer),{passive:true});
+el.addEventListener("touchmove",()=>clearTimeout(timer),{passive:true});
+return el
+}
+function renderTx(){let h=document.getElementById("homeTransactions"),a=document.getElementById("allTransactions");h.innerHTML=a.innerHTML="";let l=[...transactions].sort((x,y)=>y.date-x.date);if(!l.length){let z=`<div class="empty"><div class="empty-icon">💸</div><div class="empty-title">Hali operatsiyalar yo‘q</div><div class="empty-text">Birinchi daromad yoki xarajatingizni qo‘shing.</div></div>`;h.innerHTML=a.innerHTML=z;return}l.slice(0,5).forEach((t,i)=>h.appendChild(createTx(t,i)));l.forEach((t,i)=>a.appendChild(createTx(t,i)))}
+function deleteTx(id){let i=transactions.findIndex(t=>t.id===id);if(i<0)return;deletedTransaction={item:transactions[i],index:i};transactions.splice(i,1);save();render();haptic(18);undoButton.classList.add("show");clearTimeout(undoTimer);undoTimer=setTimeout(()=>{undoButton.classList.remove("show");deletedTransaction=null},4000)}
+function undoDelete(){if(!deletedTransaction)return;transactions.splice(deletedTransaction.index,0,deletedTransaction.item);save();render();deletedTransaction=null;undoButton.classList.remove("show");clearTimeout(undoTimer);haptic(15)}
+function save(){localStorage.setItem(TX_KEY,JSON.stringify(transactions))}
+function openTransaction(t){currentType=t;selectedCategory="other";amountInput.value="";nameInput.value="";setType(t);transactionOverlay.classList.add("show");setTimeout(()=>amountInput.focus(),300)}
+function outsideTransaction(e){if(e.target.id==="transactionOverlay")transactionOverlay.classList.remove("show")}
+function setType(t){currentType=t;incomeType.className="type-btn";expenseType.className="type-btn";(t==="income"?incomeType:expenseType).classList.add(t==="income"?"selected-income":"selected-expense");renderCats()}
+function renderCats(){categoryGrid.innerHTML="";categories[currentType].forEach(c=>{let b=document.createElement("button");b.className="category"+(c.id===selectedCategory?" selected":"");b.innerHTML=`<span>${c.icon}</span>${c.name}`;b.onclick=()=>{selectedCategory=c.id;haptic(7);renderCats()};categoryGrid.appendChild(b)})}
+async function saveTransaction(){
+let amount=rawAmount(),name=nameInput.value.trim();
+if(!amount){showToast("Summani kiriting");haptic(25);return}
+let tx={id:Date.now().toString(36)+Math.random().toString(36).slice(2),type:currentType,amount,name:name||(currentType==="income"?"Daromad":"Xarajat"),category:selectedCategory,date:Date.now()};
+transactions.push(tx);save();transactionOverlay.classList.remove("show");render();haptic(18);
+successOverlay.classList.add("show");setTimeout(()=>successOverlay.classList.remove("show"),1100);
+try{
+ await sendToTelegram(tx,transactions);
+ showToast("Telegram backup yangilandi ✓");
+}catch(e){
+ showToast("Saqlanadi, Telegram backup ulanmagan");
+}
+}
+function navigate(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(p+"Page").classList.add("active");document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x.dataset.page===p));scrollTo({top:0,behavior:"smooth"});render()}
+function renderChart(){chart.innerHTML="";chartLabels.innerHTML="";let ds=[];for(let i=6;i>=0;i--){let d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);ds.push(d)}let v=ds.map(d=>{let n=new Date(d);n.setDate(n.getDate()+1);return transactions.filter(t=>t.type==="expense"&&t.date>=d.getTime()&&t.date<n.getTime()).reduce((s,t)=>s+t.amount,0)}),mx=Math.max(...v,1);v.forEach((x,i)=>{let w=document.createElement("div");w.className="bar-wrap";let b=document.createElement("div");b.className="bar";b.style.height=Math.max(3,x/mx*100)+"%";b.style.animationDelay=i*.055+"s";w.appendChild(b);chart.appendChild(w);let l=document.createElement("div");l.className="chart-label";l.textContent=ds[i].toLocaleDateString("uz-UZ",{weekday:"short"}).slice(0,3);chartLabels.appendChild(l)})}
+function renderCategories(){categoryStats.innerHTML="";let es=transactions.filter(t=>t.type==="expense");if(!es.length){categoryStats.innerHTML=`<div class="empty"><div class="empty-icon">📊</div><div class="empty-title">Statistika hali mavjud emas</div><div class="empty-text">Xarajat qo‘shilgandan keyin ko‘rinadi.</div></div>`;return}let m={};es.forEach(t=>m[t.category]=(m[t.category]||0)+t.amount);let total=es.reduce((s,t)=>s+t.amount,0);Object.entries(m).sort((a,b)=>b[1]-a[1]).forEach(([id,val])=>{let c=categories.expense.find(x=>x.id===id)||{icon:"•",name:"Boshqa"},q=Math.round(val/total*100),d=document.createElement("div");d.className="setting";d.innerHTML=`<div class="setting-left"><div class="setting-icon">${c.icon}</div><div><div class="setting-title">${c.name}</div><div class="setting-sub">${q}% xarajat</div></div></div><div style="font-size:13px;font-weight:700">${money(val)} UZS</div>`;categoryStats.appendChild(d)})}
+function openPinChange(){newPinInput.value="";pinOverlay.classList.add("show")}
+function outsidePin(e){if(e.target.id==="pinOverlay")pinOverlay.classList.remove("show")}
+function saveNewPin(){let p=newPinInput.value.replace(/\D/g,"");if(p.length!==4){showToast("PIN 4 ta raqam bo‘lishi kerak");haptic(25);return}savedPin=p;localStorage.setItem(PIN_KEY,p);pinOverlay.classList.remove("show");haptic(20);successOverlay.classList.add("show");setTimeout(()=>successOverlay.classList.remove("show"),1100)}
+function pressPin(n){if(currentPin.length>=4)return;currentPin+=n;haptic(7);updateDots();if(currentPin.length===4)setTimeout(checkPin,130)}
+function deletePin(){currentPin=currentPin.slice(0,-1);haptic(7);updateDots()}
+function updateDots(){document.querySelectorAll(".pin-dot").forEach((d,i)=>d.classList.toggle("active",i<currentPin.length))}
+function checkPin(){if(currentPin===savedPin){haptic(25);lockScreen.classList.add("unlocking");setTimeout(()=>lockScreen.style.display="none",520)}else{haptic([20,30,20]);lockBox.classList.remove("shake");void lockBox.offsetWidth;lockBox.classList.add("shake");pinError.classList.add("show");currentPin="";updateDots();setTimeout(()=>pinError.classList.remove("show"),1200)}}
+function backupData(){let blob=new Blob([JSON.stringify({version:3,exportedAt:new Date().toISOString(),transactions},null,2)],{type:"application/json"}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="hamyon-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();URL.revokeObjectURL(u);haptic(15);showToast("Backup tayyor ✓")}
+function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=x=>{try{let d=JSON.parse(x.target.result);if(!d||!Array.isArray(d.transactions))throw 0;transactions=d.transactions.filter(t=>t&&(t.type==="income"||t.type==="expense")&&Number.isFinite(Number(t.amount))).map(t=>({id:String(t.id||Date.now()+Math.random()),type:t.type,amount:Number(t.amount),name:String(t.name||"Operatsiya").slice(0,40),category:String(t.category||"other"),date:Number(t.date)||Date.now()}));save();render();haptic(20);showToast("Backup tiklandi ✓")}catch(x){showToast("Backup fayli noto‘g‘ri");haptic(30)}e.target.value=""};r.readAsText(f)}
+function clearData(){if(!transactions.length){showToast("O‘chirish uchun ma’lumot yo‘q");return}if(confirm("Barcha tranzaksiyalar o‘chirilsinmi?")){transactions=[];save();render();haptic(25);showToast("Ma’lumotlar o‘chirildi")}}
+function showToast(s){toast.textContent=s;toast.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>toast.classList.remove("show"),2200)}
+function render(){renderBalance();renderTx();renderChart();renderCategories()}
+(function(){render();document.addEventListener("keydown",e=>{if(lockScreen.style.display==="none")return;if(/^\d$/.test(e.key))pressPin(e.key);if(e.key==="Backspace")deletePin()})})();
+
+setTimeout(()=>{
+ const intro=document.getElementById("introScreen");
+ if(intro){intro.classList.add("hide");setTimeout(()=>intro.remove(),720);}
+},2600);
+</script>
+</body>
+</html>
